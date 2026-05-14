@@ -1,0 +1,8 @@
+{
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "echo \"Este proyecto usa CSS propio en public/css/sedes.css; no requiere compilacion frontend.\"",
+    "build": "echo \"Sin build frontend requerido.\""
+  }
+}
