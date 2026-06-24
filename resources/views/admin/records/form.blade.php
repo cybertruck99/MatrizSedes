@@ -6,20 +6,21 @@
     </div>
     <div class="form-group">
         <label class="form-label">Técnico designado</label>
-        <select class="form-select" name="technician_id">
-            <option value="">Sin asignar</option>
+        <select class="form-select" name="technician_id" required>
+            <option value="" @selected(! old('technician_id', $record?->technician_id)) disabled>Seleccione un técnico</option>
             @foreach($users as $user)
-                <option value="{{ $user->id }}" @selected(old('technician_id', $record?->technician_id) == $user->id)>{{ $user->name }} - {{ $user->role_label }}</option>
+                <option value="{{ $user->id }}" @selected(old('technician_id', $record?->technician_id) == $user->id)>{{ $user->name }} - {{ $user->cargo ?? 'Cargo no definido' }}</option>
             @endforeach
         </select>
+        @error('technician_id')<div class="error-text">{{ $message }}</div>@enderror
     </div>
     <div class="form-group">
-        <label class="form-label">Estado</label>
-        <select class="form-select" name="state" required>
-            @foreach(['pendiente'=>'Pendiente','cumplido'=>'Cumplido','no cumplido'=>'No cumplido','retraso'=>'Retraso'] as $value => $label)
-                <option value="{{ $value }}" @selected(old('state', $record?->state ?? 'pendiente') === $value)>{{ $label }}</option>
-            @endforeach
-        </select>
+        <label class="form-label">Estado Inicial</label>
+        @php
+            $stateValue = $record?->state ?? 'pendiente';
+            $stateLabel = ['pendiente'=>'Pendiente','cumplido'=>'Cumplido','no cumplido'=>'No cumplido','retraso'=>'Retraso'][$stateValue] ?? 'Pendiente';
+        @endphp
+        <div class="readonly-value">{{ $stateLabel }}</div>
     </div>
     <div class="form-group">
         <label class="form-label">Plazo en días hábiles</label>
@@ -27,11 +28,11 @@
     </div>
     <div class="form-group span-2">
         <label class="form-label">Tarea asignada</label>
-        <textarea name="assigned_task" required>{{ old('assigned_task', $record?->assigned_task) }}</textarea>
+        <textarea name="assigned_task" data-auto-format="sentence" required>{{ old('assigned_task', $record?->assigned_task) }}</textarea>
         @error('assigned_task')<div class="error-text">{{ $message }}</div>@enderror
     </div>
     <div class="form-group span-2">
         <label class="form-label">Observación inicial</label>
-        <textarea name="initial_observation">{{ old('initial_observation', $record?->initial_observation) }}</textarea>
+        <textarea name="initial_observation" data-auto-format="sentence">{{ old('initial_observation', $record?->initial_observation) }}</textarea>
     </div>
 </div>

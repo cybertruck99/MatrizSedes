@@ -2,14 +2,22 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\SpecialDay;
 use App\Models\TaskRecord;
 use App\Models\User;
-use Carbon\Carbon;
+use App\Support\AdminPasswordVerifier;
+use App\Support\BusinessDayCalculator;
+use App\Support\TextFormatter;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 
 class AdminRecordController extends Controller
 {
+    public function __construct(
+        private readonly BusinessDayCalculator $businessDayCalculator,
+        private readonly AdminPasswordVerifier $adminPasswordVerifier
+    ) {
+    }
+
     public function index(Request $request)
     {
         $query = TaskRecord::with('technician')->latest();
@@ -30,7 +38,7 @@ class AdminRecordController extends Controller
     public function create()
     {
         $users = User::where('active', true)
-            ->whereIn('role', ['tecnico', 'user'])
+            ->whereIn('role', ['admin', 'tecnico', 'user'])
             ->orderBy('name')
             ->get();
 
@@ -39,10 +47,10 @@ class AdminRecordController extends Controller
 
     public function store(Request $request)
     {
-        $data = $this->validatedData($request);
+        $data = $this->normalizeData($this->validatedData($request));
         $data['created_by'] = session('auth_user_id');
-        $data['due_date'] = $this->calculateDueDate($data['start_date'], (int) $data['business_days_deadline']);
-        $data['state'] = $data['state'] ?? 'pendiente';
+        $data['due_date'] = $this->businessDayCalculator->calculate($data['start_date'], (int) $data['business_days_deadline']);
+        $data['state'] = 'pendiente';
 
         TaskRecord::create($data);
 
@@ -52,7 +60,7 @@ class AdminRecordController extends Controller
     public function edit(TaskRecord $record)
     {
         $users = User::where('active', true)
-            ->whereIn('role', ['tecnico', 'user'])
+            ->whereIn('role', ['admin', 'tecnico', 'user'])
             ->orderBy('name')
             ->get();
 
@@ -61,51 +69,52 @@ class AdminRecordController extends Controller
 
     public function update(Request $request, TaskRecord $record)
     {
-        $data = $this->validatedData($request);
-        $data['due_date'] = $this->calculateDueDate($data['start_date'], (int) $data['business_days_deadline']);
+        $data = $this->normalizeData($this->validatedData($request));
+        $shouldResetAssignmentNotice = (int) $record->technician_id !== (int) $data['technician_id'];
+        $data['due_date'] = $this->businessDayCalculator->calculate($data['start_date'], (int) $data['business_days_deadline']);
+        unset($data['state']);
+
+        if ($shouldResetAssignmentNotice) {
+            $data['assigned_viewed_at'] = null;
+        }
 
         $record->update($data);
 
         return redirect()->route('admin.records.index')->with('success', 'Registro actualizado correctamente.');
     }
 
-    public function destroy(TaskRecord $record)
+    public function destroy(Request $request, TaskRecord $record)
     {
+        $this->adminPasswordVerifier->verify($request);
+
+        $paths = $record->taskFiles()->pluck('file_path')->all();
+        if ($record->uploaded_file_path) {
+            $paths[] = $record->uploaded_file_path;
+        }
+
         $record->delete();
+        Storage::disk('public')->delete(array_values(array_unique($paths)));
 
         return redirect()->route('admin.records.index')->with('success', 'Registro eliminado correctamente.');
+    }
+
+
+    private function normalizeData(array $data): array
+    {
+        $data['assigned_task'] = TextFormatter::sentence($data['assigned_task'] ?? null);
+        $data['initial_observation'] = TextFormatter::sentence($data['initial_observation'] ?? null);
+
+        return $data;
     }
 
     private function validatedData(Request $request): array
     {
         return $request->validate([
             'start_date' => ['required', 'date'],
-            'technician_id' => ['nullable', 'exists:users,id'],
-            'state' => ['required', 'in:cumplido,no cumplido,pendiente,retraso'],
+            'technician_id' => ['required', 'exists:users,id'],
             'assigned_task' => ['required', 'string', 'max:3000'],
             'business_days_deadline' => ['required', 'integer', 'min:1', 'max:365'],
             'initial_observation' => ['nullable', 'string', 'max:3000'],
         ]);
-    }
-
-    private function calculateDueDate(string $startDate, int $businessDays): string
-    {
-        $specialDays = SpecialDay::where('active', true)
-            ->pluck('date')
-            ->map(fn ($date) => Carbon::parse($date)->toDateString())
-            ->toArray();
-
-        $date = Carbon::parse($startDate);
-        $added = 0;
-
-        while ($added < $businessDays) {
-            $date->addDay();
-            if ($date->isWeekend() || in_array($date->toDateString(), $specialDays, true)) {
-                continue;
-            }
-            $added++;
-        }
-
-        return $date->toDateString();
     }
 }

@@ -22,7 +22,7 @@ class DatabaseSeeder extends Seeder
                 'admission_date' => '2026-01-10',
                 'password' => Hash::make('admin123'),
                 'role' => 'admin',
-                'area' => 'Área de Proyectos y Planificación',
+                'area' => 'AREA PROYECTOS',
                 'phone' => '70000001',
                 'email' => 'admin@sedespotosi.gob.bo',
                 'active' => true,
@@ -38,7 +38,7 @@ class DatabaseSeeder extends Seeder
                 'admission_date' => '2026-02-01',
                 'password' => Hash::make('tecnico123'),
                 'role' => 'tecnico',
-                'area' => 'Unidad de Sistemas',
+                'area' => 'AREA SISTEMAS',
                 'phone' => '70000002',
                 'email' => 'tecnico@sedespotosi.gob.bo',
                 'active' => true,
@@ -54,21 +54,24 @@ class DatabaseSeeder extends Seeder
                 'admission_date' => '2026-02-12',
                 'password' => Hash::make('user123'),
                 'role' => 'user',
-                'area' => 'Área de Proyectos y Planificación',
+                'area' => 'AREA PROYECTOS',
                 'phone' => '70000003',
                 'email' => 'usuario@sedespotosi.gob.bo',
                 'active' => true,
             ]
         );
 
-        SpecialDay::updateOrCreate(
-            ['date' => '2026-05-27'],
-            ['name' => 'Día de la Madre', 'description' => 'Día especial considerado no hábil para fines de seguimiento interno.', 'active' => true]
-        );
-        SpecialDay::updateOrCreate(
-            ['date' => '2026-08-06'],
-            ['name' => 'Día de la Independencia', 'description' => 'Feriado nacional.', 'active' => true]
-        );
+        $this->saveSpecialDay('2026-05-27', [
+            'name' => 'Día de la Madre',
+            'description' => 'Día especial considerado no hábil para fines de seguimiento interno.',
+            'active' => true,
+        ]);
+
+        $this->saveSpecialDay('2026-08-06', [
+            'name' => 'Día de la Independencia',
+            'description' => 'Feriado nacional.',
+            'active' => true,
+        ]);
 
         $tasks = [
             [
@@ -111,6 +114,15 @@ class DatabaseSeeder extends Seeder
                 $task
             );
         }
+    }
+
+    private function saveSpecialDay(string $date, array $attributes): SpecialDay
+    {
+        $day = SpecialDay::whereDate('date', $date)->first() ?? new SpecialDay(['date' => $date]);
+        $day->fill($attributes);
+        $day->save();
+
+        return $day;
     }
 
     private function calculateDueDate(string $startDate, int $businessDays): string

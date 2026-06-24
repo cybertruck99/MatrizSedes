@@ -23,6 +23,6 @@
             </tbody>
         </table>
     </div>
-    <div class="pagination">{{ $days->links() }}</div>
 </div>
+<div class="pagination pagination-outside">{{ $days->onEachSide(1)->links('layouts.pagination') }}</div>
 @endsection

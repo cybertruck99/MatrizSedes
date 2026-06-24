@@ -1,0 +1,157 @@
+MATRIZSEDES - MATRIZ DE SEGUIMIENTO V2.0
+Servicio Departamental de Salud - SEDES Potosi
+
+============================================================
+1. REQUISITOS DEL SERVIDOR
+============================================================
+
+- PHP 8.2 o superior.
+- Composer 2.
+- MySQL 8 o MariaDB compatible.
+- Apache, Nginx, IIS o un servidor compatible con Laravel.
+- Extensiones PHP: OpenSSL, PDO, PDO MySQL, Mbstring, Tokenizer, XML,
+  Ctype, JSON, Fileinfo y BCMath.
+- Permisos de escritura en:
+  storage/
+  bootstrap/cache/
+- LibreOffice o soffice instalado si se desea que los reportes se conviertan
+  automaticamente a PDF.
+
+============================================================
+2. INSTALACION
+============================================================
+
+1) Descomprimir el ZIP en el servidor.
+
+2) Entrar a la carpeta del sistema:
+
+   cd MatrizSedes
+
+3) Instalar dependencias:
+
+   composer install --no-dev --optimize-autoloader
+
+4) Crear archivo de configuracion:
+
+   Linux:
+   cp .env.example .env
+
+   Windows:
+   copy .env.example .env
+
+5) Generar llave de aplicacion:
+
+   php artisan key:generate
+
+6) Crear la base de datos en MySQL:
+
+   CREATE DATABASE matriz_sedes CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+
+7) Editar el archivo .env con los datos reales del servidor:
+
+   APP_ENV=production
+   APP_DEBUG=false
+   APP_URL=https://dominio-o-ip-del-servidor
+
+   DB_CONNECTION=mysql
+   DB_HOST=127.0.0.1
+   DB_PORT=3306
+   DB_DATABASE=matriz_sedes
+   DB_USERNAME=usuario_mysql
+   DB_PASSWORD=contrasena_mysql
+
+8) Ejecutar migraciones y datos iniciales:
+
+   php artisan migrate --seed
+
+9) Crear enlace publico de archivos:
+
+   php artisan storage:link
+
+10) Optimizar Laravel para produccion:
+
+   php artisan config:cache
+   php artisan route:cache
+   php artisan view:cache
+
+============================================================
+3. CONFIGURACION DEL SERVIDOR WEB
+============================================================
+
+El servidor web debe apuntar a:
+
+   MatrizSedes/public
+
+No apuntar el dominio a la raiz del proyecto.
+
+En Apache se debe tener activo mod_rewrite y permitir .htaccess.
+En Nginx se debe usar public como root y enviar las solicitudes a index.php.
+
+============================================================
+4. ADMIN BASE INICIAL
+============================================================
+
+Usuario: adminbase1
+Contrasena: admin123
+
+Esta cuenta es solo para el primer ingreso.
+Al iniciar sesion por primera vez el sistema pedira cambiar usuario y contrasena.
+Despues de completar esa configuracion, la cuenta deja de ser admin base y pasa
+a funcionar como una cuenta administradora normal.
+
+El sistema no permite eliminar la ultima cuenta administradora.
+
+============================================================
+5. REPORTES PDF
+============================================================
+
+Para que los reportes se conviertan correctamente a PDF se recomienda instalar
+LibreOffice en el servidor.
+
+Si el comando soffice no esta disponible en el PATH, configurar en .env:
+
+Linux:
+SOFFICE_PATH=/usr/bin/soffice
+
+Windows:
+SOFFICE_PATH="C:\Program Files\LibreOffice\program\soffice.exe"
+
+============================================================
+6. ARCHIVOS NO INCLUIDOS EN EL ZIP
+============================================================
+
+El ZIP no incluye archivos pesados o generados automaticamente:
+
+- vendor/
+- node_modules/
+- .env
+- archivos subidos por usuarios
+- fotos de perfil cargadas
+- sesiones
+- cache
+- logs
+- ZIPs anteriores
+
+Estos archivos se crean o configuran durante la instalacion.
+
+============================================================
+7. COMANDOS UTILES
+============================================================
+
+Limpiar cache:
+
+php artisan optimize:clear
+
+Recrear cache de produccion:
+
+php artisan config:cache
+php artisan route:cache
+php artisan view:cache
+
+Levantar servidor local de prueba:
+
+php artisan serve
+
+URL local:
+
+http://127.0.0.1:8000

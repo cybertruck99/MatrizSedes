@@ -6,8 +6,8 @@
 <div class="card">
     <div class="toolbar">
         <a class="btn btn-primary" href="{{ route('admin.records.create') }}">Crear Nuevo Registro</a>
-        <form class="searchbar" method="GET">
-            <input class="form-control" style="max-width:280px" name="search" value="{{ request('search') }}" placeholder="Buscar tarea o técnico">
+        <form class="searchbar" method="GET" data-live-search>
+            <input class="form-control" style="max-width:280px" type="search" name="search" value="{{ request('search') }}" placeholder="Buscar tarea o técnico">
             <button class="btn btn-secondary" type="submit">Buscar</button>
         </form>
     </div>
@@ -16,7 +16,7 @@
             <thead><tr><th>Fecha creación</th><th>Fecha inicio</th><th>Técnico</th><th>Tarea</th><th>Plazo</th><th>Estado</th><th>Acciones</th></tr></thead>
             <tbody>
             @forelse($records as $record)
-                <tr class="{{ $record->state_class }}">
+                <tr class="{{ $record->state_class }} task-row-link" data-row-href="{{ route('admin.tasks.show', $record) }}" tabindex="0" aria-label="Ver perfil de tarea: {{ $record->assigned_task }}">
                     <td>{{ $record->created_at->format('d/m/Y H:i') }}</td>
                     <td>{{ $record->start_date->format('d/m/Y') }}</td>
                     <td>{{ $record->technician->name ?? 'Sin asignar' }}</td>
@@ -26,10 +26,6 @@
                     <td>
                         <div class="actions">
                             <a class="btn btn-sm btn-secondary" href="{{ route('admin.records.edit', $record) }}">Editar</a>
-                            <form method="POST" action="{{ route('admin.records.destroy', $record) }}" onsubmit="return confirm('¿Eliminar este registro?')">
-                                @csrf @method('DELETE')
-                                <button class="btn btn-sm btn-danger" type="submit">Eliminar</button>
-                            </form>
                         </div>
                     </td>
                 </tr>
@@ -39,6 +35,6 @@
             </tbody>
         </table>
     </div>
-    <div class="pagination">{{ $records->links() }}</div>
 </div>
+<div class="pagination pagination-outside">{{ $records->onEachSide(1)->links('layouts.pagination') }}</div>
 @endsection

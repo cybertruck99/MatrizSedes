@@ -4,30 +4,36 @@
 /public/build
 /public/hot
 /public/storage
-
 /storage/*.key
 
 /storage/app/*
-!/storage/app/.gitignore
+!/storage/app/.gitkeep
 !/storage/app/public/
-!/storage/app/public/.gitignore
+!/storage/app/public/.gitkeep
+!/storage/app/public/tasks/
+/storage/app/public/tasks/*
+!/storage/app/public/tasks/.gitkeep
+/storage/app/public/profile-photos/*
+/storage/app/public/task-upload-drafts/*
+/storage/app/report-conversions/*
 
 /storage/framework/cache/*
-!/storage/framework/cache/.gitignore
+!/storage/framework/cache/.gitkeep
 !/storage/framework/cache/data/
-!/storage/framework/cache/data/.gitignore
+/storage/framework/cache/data/*
+!/storage/framework/cache/data/.gitkeep
 
 /storage/framework/sessions/*
-!/storage/framework/sessions/.gitignore
+!/storage/framework/sessions/.gitkeep
 
 /storage/framework/testing/*
-!/storage/framework/testing/.gitignore
+!/storage/framework/testing/.gitkeep
 
 /storage/framework/views/*
-!/storage/framework/views/.gitignore
+!/storage/framework/views/.gitkeep
 
 /storage/logs/*
-!/storage/logs/.gitignore
+!/storage/logs/.gitkeep
 
 /bootstrap/cache/*
 !/bootstrap/cache/.gitignore
@@ -35,10 +41,10 @@
 .env
 .env.*
 !.env.example
+!.env.testing
 
 .phpunit.result.cache
 .phpunit.cache
-
 Homestead.json
 Homestead.yaml
 auth.json
@@ -54,6 +60,5 @@ pnpm-debug.log
 *.zip
 *.rar
 *.7z
-
 .DS_Store
 Thumbs.db
