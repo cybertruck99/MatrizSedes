@@ -169,6 +169,17 @@ Abrir:
 http://127.0.0.1:8000
 ```
 
+## Pruebas seguras
+
+Antes de ejecutar pruebas, limpiar la caché de Laravel:
+
+```bash
+php artisan optimize:clear
+vendor/bin/phpunit
+```
+
+Las pruebas están protegidas para ejecutarse solo con `APP_ENV=testing`, `DB_CONNECTION=sqlite` y `DB_DATABASE=:memory:`. Si Laravel conserva una caché de configuración real, PHPUnit se bloqueará antes de tocar la base de datos.
+
 ## Notas de entrega
 
 El paquete de instalación no incluye:
