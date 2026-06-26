@@ -1,6 +1,6 @@
 @extends('layouts.app')
-@section('title', 'Panel Tecnico | Matriz SEDES')
-@section('page_title', 'Panel Tecnico')
+@section('title', 'Panel Técnico | Matriz SEDES')
+@section('page_title', 'Panel Técnico')
 @section('page_subtitle', 'Vista operativa con consulta de matriz y usuarios')
 @section('page_actions')
     <a class="top-stat-chip" href="{{ route('tecnico.tasks', ['estado' => 'pendiente']) }}">

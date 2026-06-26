@@ -15,7 +15,7 @@ Servicio Departamental de Salud - SEDES Potosi
   storage/
   bootstrap/cache/
 - LibreOffice o soffice instalado en el servidor para generar reportes PDF.
-  Si no esta disponible, el sistema entregara el reporte en DOCX como respaldo.
+  Si no está disponible, el sistema entregará el reporte en DOCX como respaldo.
 
 ============================================================
 2. INSTALACION
@@ -31,7 +31,7 @@ Servicio Departamental de Salud - SEDES Potosi
 
    composer install --no-dev --optimize-autoloader
 
-4) Crear archivo de configuracion:
+4) Crear archivo de configuración:
 
    Linux:
    cp .env.example .env
@@ -39,7 +39,7 @@ Servicio Departamental de Salud - SEDES Potosi
    Windows:
    copy .env.example .env
 
-5) Generar llave de aplicacion:
+5) Generar llave de aplicación:
 
    php artisan key:generate
 
@@ -58,24 +58,24 @@ Servicio Departamental de Salud - SEDES Potosi
    DB_PORT=3306
    DB_DATABASE=matriz_sedes
    DB_USERNAME=usuario_mysql
-   DB_PASSWORD=contrasena_mysql
+   DB_PASSWORD=contraseña_mysql
 
 8) Ejecutar migraciones y datos iniciales:
 
    php artisan migrate --seed
 
-9) Crear enlace publico de archivos:
+9) Crear enlace público de archivos:
 
    php artisan storage:link
 
-10) Optimizar Laravel para produccion:
+10) Optimizar Laravel para producción:
 
    php artisan config:cache
    php artisan route:cache
    php artisan view:cache
 
 ============================================================
-3. CONFIGURACION DEL SERVIDOR WEB
+3. CONFIGURACIÓN DEL SERVIDOR WEB
 ============================================================
 
 El servidor web debe apuntar a:
@@ -92,24 +92,24 @@ En Nginx se debe usar public como root y enviar las solicitudes a index.php.
 ============================================================
 
 Usuario: adminbase1
-Contrasena: admin123
+Contraseña: admin123
 
 Esta cuenta es solo para el primer ingreso.
-Al iniciar sesion por primera vez el sistema pedira cambiar usuario y contrasena.
-Despues de completar esa configuracion, la cuenta deja de ser admin base y pasa
+Al iniciar sesión por primera vez el sistema pedirá cambiar usuario y contraseña.
+Después de completar esa configuración, la cuenta deja de ser admin base y pasa
 a funcionar como una cuenta administradora normal.
 
-El sistema no permite eliminar la ultima cuenta administradora.
+El sistema no permite eliminar la última cuenta administradora.
 
 ============================================================
 5. REPORTES PDF
 ============================================================
 
 Para que los reportes se generen correctamente en PDF se recomienda instalar
-LibreOffice en el servidor. Si la conversion no esta disponible, el sistema
-entregara el mismo reporte en DOCX como respaldo.
+LibreOffice en el servidor. Si la conversión no está disponible, el sistema
+entregará el mismo reporte en DOCX como respaldo.
 
-Si el comando soffice no esta disponible en el PATH, configurar en .env:
+Si el comando soffice no está disponible en el PATH, configurar en .env:
 
 Linux:
 SOFFICE_PATH=/usr/bin/soffice
@@ -121,7 +121,7 @@ SOFFICE_PATH="C:/Program Files/LibreOffice/program/soffice.exe"
 6. ARCHIVOS NO INCLUIDOS EN EL ZIP
 ============================================================
 
-El ZIP no incluye archivos pesados o generados automaticamente:
+El ZIP no incluye archivos pesados o generados automáticamente:
 
 - vendor/
 - node_modules/
@@ -133,7 +133,7 @@ El ZIP no incluye archivos pesados o generados automaticamente:
 - logs
 - ZIPs anteriores
 
-Estos archivos se crean o configuran durante la instalacion.
+Estos archivos se crean o configuran durante la instalación.
 
 ============================================================
 7. COMANDOS UTILES
@@ -143,7 +143,7 @@ Limpiar cache:
 
 php artisan optimize:clear
 
-Recrear cache de produccion:
+Recrear caché de producción:
 
 php artisan config:cache
 php artisan route:cache

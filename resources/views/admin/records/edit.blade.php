@@ -1,7 +1,7 @@
 @extends('layouts.app')
 @section('title', 'Editar Registro | Matriz SEDES')
 @section('page_title', 'Editar Registro')
-@section('page_subtitle', 'Actualizacion de tarea asignada')
+@section('page_subtitle', 'Actualización de tarea asignada')
 @section('content')
 @error('admin_password')<div class="alert alert-error">{{ $message }}</div>@enderror
 <div class="card form-card">
@@ -19,7 +19,7 @@
 <div class="confirmation-modal" id="delete-task-modal" data-confirm-modal data-auto-open="{{ $errors->has('admin_password') ? '1' : '0' }}" hidden>
     <div class="confirmation-dialog" role="dialog" aria-modal="true" aria-labelledby="delete-task-title">
         <button class="confirmation-close" type="button" data-confirm-close aria-label="Cerrar">&times;</button>
-        <h3 id="delete-task-title">Confirmar eliminacion de tarea</h3>
+        <h3 id="delete-task-title">Confirmar eliminación de tarea</h3>
         <p>Esta acción eliminará la tarea <strong>{{ $record->assigned_task }}</strong> y sus archivos asociados.</p>
         <form method="POST" action="{{ route('admin.records.destroy', $record) }}">
             @csrf

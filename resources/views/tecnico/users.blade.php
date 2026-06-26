@@ -1,16 +1,16 @@
 @extends('layouts.app')
-@section('title', 'Usuarios | Tecnico')
+@section('title', 'Usuarios | Técnico')
 @section('page_title', 'Ver Usuarios')
 @section('page_subtitle', 'Consulta de personal registrado')
 @section('content')
 <div class="card">
     <form class="toolbar" method="GET" data-live-search>
-        <input class="form-control" style="max-width:280px" type="search" name="search" value="{{ request('search') }}" placeholder="Buscar usuario, cargo o area">
+        <input class="form-control" style="max-width:280px" type="search" name="search" value="{{ request('search') }}" placeholder="Buscar usuario, cargo o área">
         <button class="btn btn-secondary" type="submit">Buscar</button>
     </form>
     <div class="table-wrap">
         <table class="table">
-            <thead><tr><th>Nombre</th><th>Rol</th><th>Area</th><th>Cargo</th><th>Ingreso</th></tr></thead>
+            <thead><tr><th>Nombre</th><th>Rol</th><th>Área</th><th>Cargo</th><th>Ingreso</th></tr></thead>
             <tbody>
             @forelse($users as $user)
                 <tr class="task-row-link" data-row-href="{{ route('tecnico.users.show', $user) }}" tabindex="0" aria-label="Ver perfil de usuario: {{ $user->name }}">

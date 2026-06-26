@@ -4,18 +4,18 @@ Sistema web profesional para la Matriz de Seguimiento de la Unidad de Planificac
 
 ## Funciones principales
 
-- Acceso por roles: administrador, tecnico y usuario.
+- Acceso por roles: administrador, técnico y usuario.
 - Paneles diferenciados por rol.
-- Creacion, edicion, revision y seguimiento de tareas institucionales.
-- Carga multiple de archivos con nombres originales.
-- Perfil de tarea para usuarios, tecnicos y revision administrativa.
+- Creación, edición, revisión y seguimiento de tareas institucionales.
+- Carga múltiple de archivos con nombres originales.
+- Perfil de tarea para usuarios, técnicos y revisión administrativa.
 - Notificaciones visuales para tareas nuevas, archivos enviados y archivos actualizados.
-- Control de cumplimiento, observaciones y estados de revision.
+- Control de cumplimiento, observaciones y estados de revisión.
 - Reportes por tarea, semanales y por rango de fechas.
-- Gestion de usuarios, perfiles, fotografias y recuperacion asistida de contrasenas.
-- Dias especiales y feriados nacionales fijos precargados.
-- Control de sesiones activas, inactividad y limitacion basica contra exceso de solicitudes.
-- Diseno responsivo para PC y celular.
+- Gestión de usuarios, perfiles, fotografías y recuperación asistida de contraseñas.
+- Días especiales y feriados nacionales fijos precargados.
+- Control de sesiones activas, inactividad y limitación básica contra exceso de solicitudes.
+- Diseño responsivo para PC y celular.
 
 ## Requisitos del servidor
 
@@ -25,9 +25,9 @@ Sistema web profesional para la Matriz de Seguimiento de la Unidad de Planificac
 - Servidor web Apache o Nginx.
 - Extensiones PHP habituales de Laravel: OpenSSL, PDO, PDO MySQL, Mbstring, Tokenizer, XML, Ctype, JSON, Fileinfo, BCMath.
 - Permisos de escritura en `storage/` y `bootstrap/cache/`.
-- LibreOffice o soffice instalado en el servidor para generar reportes PDF. Si no esta disponible, el sistema entregara el reporte en DOCX como respaldo.
+- LibreOffice o soffice instalado en el servidor para generar reportes PDF. Si no está disponible, el sistema entregará el reporte en DOCX como respaldo.
 
-## Instalacion en servidor
+## Instalación en servidor
 
 1. Copiar o clonar el proyecto en el servidor.
 
@@ -42,7 +42,7 @@ cd MatrizSedes
 composer install --no-dev --optimize-autoloader
 ```
 
-3. Crear el archivo de configuracion.
+3. Crear el archivo de configuración.
 
 ```bash
 cp .env.example .env
@@ -74,12 +74,12 @@ DB_HOST=127.0.0.1
 DB_PORT=3306
 DB_DATABASE=matriz_sedes
 DB_USERNAME=usuario_mysql
-DB_PASSWORD=contrasena_mysql
+DB_PASSWORD=contraseña_mysql
 
 FILESYSTEM_DISK=public
 ```
 
-Si LibreOffice no esta en el PATH del servidor, agregar la ruta:
+Si LibreOffice no está en el PATH del servidor, agregar la ruta:
 
 ```env
 SOFFICE_PATH=/usr/bin/soffice
@@ -113,7 +113,7 @@ storage
 bootstrap/cache
 ```
 
-8. Optimizar para produccion.
+8. Optimizar para producción.
 
 ```bash
 php artisan config:cache
@@ -121,7 +121,7 @@ php artisan route:cache
 php artisan view:cache
 ```
 
-## Configuracion del servidor web
+## Configuración del servidor web
 
 El dominio o virtual host debe apuntar a la carpeta:
 
@@ -145,14 +145,14 @@ Al instalar por primera vez existe una cuenta administradora base:
 
 ```text
 Usuario: adminbase1
-Contrasena: admin123
+Contraseña: admin123
 ```
 
-Esta cuenta es solo para el primer ingreso. Al acceder por primera vez el sistema solicitara cambiar usuario y contrasena. Despues de configurar la cuenta base, el aviso ya no volvera a mostrarse.
+Esta cuenta es solo para el primer ingreso. Al acceder por primera vez el sistema solicitará cambiar usuario y contraseña. Después de configurar la cuenta base, el aviso ya no volverá a mostrarse.
 
-Importante: no eliminar la ultima cuenta administradora. El sistema bloquea esa accion para evitar quedar sin acceso administrativo.
+Importante: no eliminar la última cuenta administradora. El sistema bloquea esa acción para evitar quedar sin acceso administrativo.
 
-## Uso local rapido
+## Uso local rápido
 
 ```bash
 composer install
@@ -171,7 +171,7 @@ http://127.0.0.1:8000
 
 ## Notas de entrega
 
-El paquete de instalacion no incluye:
+El paquete de instalación no incluye:
 
 - `vendor/`
 - `node_modules/`
@@ -183,4 +183,4 @@ El paquete de instalacion no incluye:
 - logs
 - ZIPs previos
 
-Estos archivos se generan o configuran en el servidor durante la instalacion.
+Estos archivos se generan o configuran en el servidor durante la instalación.

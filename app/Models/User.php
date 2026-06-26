@@ -100,7 +100,7 @@ class User extends Authenticatable
     {
         return match ($this->role) {
             'admin' => 'Administrador',
-            'tecnico' => 'Tecnico',
+            'tecnico' => 'Técnico',
             default => 'Usuario',
         };
     }
@@ -147,6 +147,6 @@ class User extends Authenticatable
             return 'No Subió Tarea';
         }
 
-        return $task->has_uploaded_files ? 'Tarea Subida' : 'Aun no Subió Tarea';
+        return $task->has_uploaded_files ? 'Tarea Subida' : 'Aún no Subió Tarea';
     }
 }

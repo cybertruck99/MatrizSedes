@@ -1,7 +1,7 @@
 @extends('layouts.app')
 @section('title', 'Panel Admin | Matriz SEDES')
 @section('page_title', 'Panel de Administracion')
-@section('page_subtitle', 'Control general de registros, usuarios, matriz y dias especiales')
+@section('page_subtitle', 'Control general de registros, usuarios, matriz y días especiales')
 @section('page_actions')
     <a class="top-stat-chip" href="{{ route('admin.my-tasks.index', ['estado' => 'pendiente']) }}">
         <span>Pendientes</span>
@@ -65,7 +65,7 @@
     </div>
     <div class="table-wrap">
         <table class="table">
-            <thead><tr><th>Tecnico designado</th><th>Tarea</th><th>Estado</th><th>Vencimiento</th></tr></thead>
+            <thead><tr><th>Técnico designado</th><th>Tarea</th><th>Estado</th><th>Vencimiento</th></tr></thead>
             <tbody>
             @forelse($recentTasks as $task)
                 <tr class="{{ $task->state_class }} task-row-link" data-row-href="{{ route('admin.tasks.show', $task) }}" tabindex="0" aria-label="Ver perfil de tarea: {{ $task->assigned_task }}">
@@ -75,7 +75,7 @@
                     <td>{{ optional($task->due_date)->format('d/m/Y') }}</td>
                 </tr>
             @empty
-                <tr><td colspan="4">Aun no existen registros.</td></tr>
+                <tr><td colspan="4">Aún no existen registros.</td></tr>
             @endforelse
             </tbody>
         </table>

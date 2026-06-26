@@ -237,14 +237,14 @@
             <button class="confirmation-close" type="button" data-confirm-close aria-label="Cerrar">&times;</button>
             <h3 id="revoke-admin-permission-title">Cancelar permisos de Admin</h3>
             <p>
-                Se cancelarÃ¡ el acceso temporal de administrador de <strong>{{ $user->name }}</strong>.
-                Para confirmar esta acciÃ³n, ingrese su contraseÃ±a de administrador.
+                Se cancelará el acceso temporal de administrador de <strong>{{ $user->name }}</strong>.
+                Para confirmar esta acción, ingrese su contraseña de administrador.
             </p>
             <form method="POST" action="{{ route('admin.users.admin-permissions.revoke', $user) }}">
                 @csrf
                 <input type="hidden" name="admin_permission_action" value="revoke">
                 <div class="form-group">
-                    <label class="form-label" for="revoke-admin-password">Ingrese su contraseÃ±a</label>
+                    <label class="form-label" for="revoke-admin-password">Ingrese su contraseña</label>
                     <input class="form-control" id="revoke-admin-password" type="password" name="admin_password" required autocomplete="current-password" data-confirm-password>
                 </div>
                 @error('admin_password')<div class="error-text">{{ $message }}</div>@enderror

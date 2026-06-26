@@ -101,7 +101,7 @@ class ReportPdfGenerationTest extends TestCase
             'password' => 'secret123',
             'role' => $role,
             'area' => 'AREA SISTEMAS',
-            'cargo' => $role === 'admin' ? 'Tecnico de sistemas' : 'Responsable',
+            'cargo' => $role === 'admin' ? 'Técnico de sistemas' : 'Responsable',
             'active' => true,
         ]);
     }

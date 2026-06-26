@@ -19,7 +19,7 @@
             <thead>
             <tr>
                 <th>Nombre completo</th>
-                <th>Area perteneciente</th>
+                <th>Área perteneciente</th>
                 <th>Cargo</th>
                 <th>Fecha ingreso</th>
                 <th>Tarea reciente</th>

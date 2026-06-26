@@ -437,12 +437,12 @@ document.addEventListener('DOMContentLoaded', () => {
                 const minutes = totalMinutes % 60;
 
                 if (days > 0) {
-                    return `La Tarea esta retrasada por: ${plural(days, 'día', 'días')} ${plural(hours, 'hora', 'horas')}`;
+                    return `La Tarea está retrasada por: ${plural(days, 'día', 'días')} ${plural(hours, 'hora', 'horas')}`;
                 }
                 if (hours > 0) {
-                    return `La Tarea esta retrasada por: ${plural(hours, 'hora', 'horas')} ${plural(minutes, 'minuto', 'minutos')}`;
+                    return `La Tarea está retrasada por: ${plural(hours, 'hora', 'horas')} ${plural(minutes, 'minuto', 'minutos')}`;
                 }
-                return `La Tarea esta retrasada por: ${plural(minutes, 'minuto', 'minutos')}`;
+                return `La Tarea está retrasada por: ${plural(minutes, 'minuto', 'minutos')}`;
             };
 
             const formatDuration = (diffMs, sentTask = false) => {
@@ -507,7 +507,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
                     element.textContent = diff >= 0
                         ? `La Tarea Fue enviada: ${duration} antes`
-                        : `La Tarea fue enviada: ${duration} despues`;
+                        : `La Tarea fue enviada: ${duration} después`;
                     setTimeState(diff >= 0 ? 'sent-on-time' : 'sent-late');
                     return;
                 }
@@ -523,7 +523,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
                 element.textContent = diff >= 0
                     ? `${duration} restante`
-                    : `La Tarea esta retrasada por: ${duration}`;
+                    : `La Tarea está retrasada por: ${duration}`;
                 setTimeState(diff >= 0 ? 'pending' : 'overdue');
             };
 

@@ -28,7 +28,7 @@
                 <label class="form-label">Rol Predeterminado</label>
                 <select class="form-select" name="role" required>
                     <option value="user" @selected(old('role') === 'user')>Usuario</option>
-                    <option value="tecnico" @selected(old('role') === 'tecnico')>Tecnico</option>
+                    <option value="tecnico" @selected(old('role') === 'tecnico')>Técnico</option>
                     <option value="admin" @selected(old('role') === 'admin')>Administrador</option>
                 </select>
             </div>

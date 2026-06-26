@@ -182,10 +182,10 @@ http://127.0.0.1:8000
 Usuario:
 adminbase1
 
-Contrasena:
+Contraseña:
 admin123
 
-Al ingresar por primera vez, cambiar usuario y contrasena.
+Al ingresar por primera vez, cambiar usuario y contraseña.
 
 ============================================================
 18. COMANDOS UTILES

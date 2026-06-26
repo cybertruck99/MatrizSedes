@@ -16,7 +16,7 @@
             <thead>
             <tr>
                 <th>Nombre completo</th>
-                <th>Area perteneciente</th>
+                <th>Área perteneciente</th>
                 <th>Cargo</th>
                 <th>Tarea reciente</th>
                 <th>Creado</th>
