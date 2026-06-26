@@ -95,8 +95,19 @@ class AdminUserController extends Controller
                 'string',
                 'max:50',
                 Rule::unique('users', 'username')->ignore($user->id),
+                function (string $attribute, mixed $value, \Closure $fail): void {
+                    if (mb_strtolower(trim((string) $value), 'UTF-8') === 'adminbase1') {
+                        $fail('Debe definir un usuario nuevo distinto a adminbase1.');
+                    }
+                },
             ],
-            'password' => $this->passwordRules(true),
+            'password' => array_merge($this->passwordRules(true), [
+                function (string $attribute, mixed $value, \Closure $fail): void {
+                    if (trim((string) $value) === 'admin123') {
+                        $fail('Debe definir una contraseña nueva distinta a admin123.');
+                    }
+                },
+            ]),
             'password_confirmation' => ['required', 'same:password'],
         ], $this->passwordMessages());
 

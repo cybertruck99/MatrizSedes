@@ -1,0 +1,233 @@
+MATRIZSEDES - INSTALACION WINDOWS DESDE CERO
+Comandos directos para copiar y pegar
+Orientado a Windows 10/11
+
+============================================================
+0. ABRIR POWERSHELL COMO ADMINISTRADOR
+============================================================
+
+Presiona Inicio, escribe PowerShell, clic derecho y Ejecutar como administrador.
+
+============================================================
+1. INSTALAR REQUISITOS PRINCIPALES CON WINGET
+============================================================
+
+winget install --id ApacheFriends.Xampp.8.2 -e --source winget
+winget install --id Composer.Composer -e --source winget
+winget install --id Git.Git -e --source winget
+winget install --id TheDocumentFoundation.LibreOffice -e --source winget
+winget install --id OpenJS.NodeJS.LTS -e --source winget
+
+============================================================
+2. AGREGAR VARIABLES DE ENTORNO AL PATH
+============================================================
+
+$extra = @(
+"C:\xampp\php",
+"C:\xampp\mysql\bin",
+"C:\ProgramData\ComposerSetup\bin",
+"C:\Program Files\Git\cmd",
+"C:\Program Files\LibreOffice\program"
+)
+
+$actual = [Environment]::GetEnvironmentVariable("Path","Machine")
+foreach ($p in $extra) {
+    if ($actual -notlike "*$p*") {
+        $actual = "$actual;$p"
+    }
+}
+[Environment]::SetEnvironmentVariable("Path",$actual,"Machine")
+
+Cierra PowerShell y abre otra vez PowerShell como administrador.
+
+============================================================
+3. VERIFICAR INSTALACIONES
+============================================================
+
+php -v
+composer -V
+git --version
+mysql --version
+soffice --version
+node -v
+npm -v
+
+============================================================
+4. HABILITAR EXTENSIONES PHP NECESARIAS
+============================================================
+
+$phpini = "C:\xampp\php\php.ini"
+
+(Get-Content $phpini) `
+-replace ';extension=openssl','extension=openssl' `
+-replace ';extension=pdo_mysql','extension=pdo_mysql' `
+-replace ';extension=mbstring','extension=mbstring' `
+-replace ';extension=fileinfo','extension=fileinfo' `
+-replace ';extension=mysqli','extension=mysqli' `
+-replace ';extension=zip','extension=zip' `
+-replace ';extension=gd','extension=gd' `
+-replace ';extension=intl','extension=intl' `
+-replace ';extension=bcmath','extension=bcmath' `
+| Set-Content $phpini
+
+php -m
+
+============================================================
+5. INICIAR MYSQL Y APACHE DE XAMPP
+============================================================
+
+Start-Process "C:\xampp\xampp-control.exe"
+
+Desde el panel de XAMPP, presiona Start en:
+- Apache
+- MySQL
+
+============================================================
+6. COPIAR O DESCOMPRIMIR EL SISTEMA
+============================================================
+
+mkdir C:\Sistemas
+
+Copia el ZIP de MatrizSedes a:
+C:\Sistemas\MatrizSedes.zip
+
+Expand-Archive -Path "C:\Sistemas\MatrizSedes.zip" -DestinationPath "C:\Sistemas" -Force
+
+cd C:\Sistemas\MatrizSedes
+
+============================================================
+7. INSTALAR DEPENDENCIAS DEL SISTEMA
+============================================================
+
+composer install --no-dev --optimize-autoloader
+
+============================================================
+8. CREAR ARCHIVO .ENV
+============================================================
+
+copy .env.example .env
+
+============================================================
+9. CONFIGURAR .ENV PARA WINDOWS LOCAL
+============================================================
+
+(Get-Content .env) `
+-replace '^APP_ENV=.*','APP_ENV=production' `
+-replace '^APP_DEBUG=.*','APP_DEBUG=false' `
+-replace '^APP_URL=.*','APP_URL=http://127.0.0.1:8000' `
+-replace '^DB_CONNECTION=.*','DB_CONNECTION=mysql' `
+-replace '^DB_HOST=.*','DB_HOST=127.0.0.1' `
+-replace '^DB_PORT=.*','DB_PORT=3306' `
+-replace '^DB_DATABASE=.*','DB_DATABASE=matriz_sedes' `
+-replace '^DB_USERNAME=.*','DB_USERNAME=root' `
+-replace '^DB_PASSWORD=.*','DB_PASSWORD=' `
+| Set-Content .env
+
+Add-Content .env 'SOFFICE_PATH="C:/Program Files/LibreOffice/program/soffice.exe"'
+
+============================================================
+10. GENERAR LLAVE DE LARAVEL
+============================================================
+
+php artisan key:generate
+
+============================================================
+11. CREAR BASE DE DATOS
+============================================================
+
+mysql -u root -e "CREATE DATABASE matriz_sedes CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;"
+
+============================================================
+12. EJECUTAR MIGRACIONES Y DATOS INICIALES
+============================================================
+
+php artisan migrate --seed
+
+============================================================
+13. CREAR ENLACE PUBLICO DE ARCHIVOS
+============================================================
+
+php artisan storage:link
+
+============================================================
+14. DAR PERMISOS BASICOS A CARPETAS DEL SISTEMA
+============================================================
+
+icacls storage /grant Everyone:F /T
+icacls bootstrap\cache /grant Everyone:F /T
+
+============================================================
+15. OPTIMIZAR LARAVEL
+============================================================
+
+php artisan optimize:clear
+php artisan config:cache
+php artisan route:cache
+php artisan view:cache
+
+============================================================
+16. LEVANTAR EL SISTEMA EN MODO LOCAL
+============================================================
+
+php artisan serve --host=127.0.0.1 --port=8000
+
+Abrir en el navegador:
+
+http://127.0.0.1:8000
+
+============================================================
+17. ADMIN BASE INICIAL
+============================================================
+
+Usuario:
+adminbase1
+
+Contrasena:
+admin123
+
+Al ingresar por primera vez, cambiar usuario y contrasena.
+
+============================================================
+18. COMANDOS UTILES
+============================================================
+
+Limpiar cache:
+
+php artisan optimize:clear
+
+Recrear cache:
+
+php artisan config:cache
+php artisan route:cache
+php artisan view:cache
+
+Volver a ejecutar migraciones desde cero:
+
+php artisan migrate:fresh --seed
+
+Levantar servidor local:
+
+php artisan serve --host=127.0.0.1 --port=8000
+
+============================================================
+19. OPCIONAL: SI USA NODE Y EXISTE PACKAGE.JSON
+============================================================
+
+npm install
+npm run build
+
+============================================================
+20. OPCIONAL: CONFIGURAR APACHE PARA USAR PUBLIC
+============================================================
+
+El servidor web debe apuntar a:
+
+C:\Sistemas\MatrizSedes\public
+
+No apuntar Apache a:
+
+C:\Sistemas\MatrizSedes
+
+============================================================
+FIN
+============================================================

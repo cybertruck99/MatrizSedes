@@ -1,4 +1,4 @@
-# MatrizSedes - Matriz de Seguimiento V2.0
+# MatrizSedes - Matriz de Seguimiento V3.0
 
 Sistema web profesional para la Matriz de Seguimiento de la Unidad de Planificacion y Proyectos del Servicio Departamental de Salud - SEDES Potosi.
 
@@ -25,7 +25,7 @@ Sistema web profesional para la Matriz de Seguimiento de la Unidad de Planificac
 - Servidor web Apache o Nginx.
 - Extensiones PHP habituales de Laravel: OpenSSL, PDO, PDO MySQL, Mbstring, Tokenizer, XML, Ctype, JSON, Fileinfo, BCMath.
 - Permisos de escritura en `storage/` y `bootstrap/cache/`.
-- LibreOffice o soffice instalado en el servidor si se desea convertir los reportes DOCX a PDF automaticamente.
+- LibreOffice o soffice instalado en el servidor para generar reportes PDF. Si no esta disponible, el sistema entregara el reporte en DOCX como respaldo.
 
 ## Instalacion en servidor
 
@@ -88,7 +88,7 @@ SOFFICE_PATH=/usr/bin/soffice
 En Windows puede ser:
 
 ```env
-SOFFICE_PATH="C:\Program Files\LibreOffice\program\soffice.exe"
+SOFFICE_PATH="C:/Program Files/LibreOffice/program/soffice.exe"
 ```
 
 6. Ejecutar migraciones y datos iniciales.

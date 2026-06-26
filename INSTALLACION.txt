@@ -1,4 +1,4 @@
-MATRIZSEDES - MATRIZ DE SEGUIMIENTO V2.0
+MATRIZSEDES - MATRIZ DE SEGUIMIENTO V3.0
 Servicio Departamental de Salud - SEDES Potosi
 
 ============================================================
@@ -14,8 +14,8 @@ Servicio Departamental de Salud - SEDES Potosi
 - Permisos de escritura en:
   storage/
   bootstrap/cache/
-- LibreOffice o soffice instalado si se desea que los reportes se conviertan
-  automaticamente a PDF.
+- LibreOffice o soffice instalado en el servidor para generar reportes PDF.
+  Si no esta disponible, el sistema entregara el reporte en DOCX como respaldo.
 
 ============================================================
 2. INSTALACION
@@ -105,8 +105,9 @@ El sistema no permite eliminar la ultima cuenta administradora.
 5. REPORTES PDF
 ============================================================
 
-Para que los reportes se conviertan correctamente a PDF se recomienda instalar
-LibreOffice en el servidor.
+Para que los reportes se generen correctamente en PDF se recomienda instalar
+LibreOffice en el servidor. Si la conversion no esta disponible, el sistema
+entregara el mismo reporte en DOCX como respaldo.
 
 Si el comando soffice no esta disponible en el PATH, configurar en .env:
 
@@ -114,7 +115,7 @@ Linux:
 SOFFICE_PATH=/usr/bin/soffice
 
 Windows:
-SOFFICE_PATH="C:\Program Files\LibreOffice\program\soffice.exe"
+SOFFICE_PATH="C:/Program Files/LibreOffice/program/soffice.exe"
 
 ============================================================
 6. ARCHIVOS NO INCLUIDOS EN EL ZIP

@@ -31,7 +31,7 @@
                 <summary class="btn btn-gold">Generar Reporte Semanal</summary>
                 <div class="report-menu-panel report-menu-wide">
                     <button
-                        class="btn btn-secondary"
+                        class="btn btn-primary"
                         type="button"
                         data-confirm-open="report-observations-modal"
                         data-report-modal-open

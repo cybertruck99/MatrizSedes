@@ -45,8 +45,12 @@ class ReportDocxPdfConverter
             $process = new Process([
                 $binary,
                 '--headless',
+                '--nologo',
+                '--nolockcheck',
+                '--nodefault',
+                '--nofirststartwizard',
                 '--convert-to',
-                'pdf',
+                'pdf:writer_pdf_Export',
                 '--outdir',
                 $directory,
                 $docxPath,
@@ -71,13 +75,18 @@ class ReportDocxPdfConverter
 
     private function candidates(): array
     {
-        return array_values(array_filter(array_unique([
+        $candidates = [
             env('SOFFICE_PATH'),
             env('LIBREOFFICE_PATH'),
             'soffice',
             'libreoffice',
             'C:\Program Files\LibreOffice\program\soffice.exe',
             'C:\Program Files (x86)\LibreOffice\program\soffice.exe',
-        ])));
+        ];
+
+        return array_values(array_filter(array_unique(array_map(
+            fn ($candidate) => is_string($candidate) ? trim($candidate, " \t\n\r\0\x0B\"'") : null,
+            $candidates
+        ))));
     }
 }

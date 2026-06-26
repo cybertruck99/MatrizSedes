@@ -57,7 +57,11 @@
             @if(request()->routeIs('admin.*') && ! $user->trashed())
                 <a class="btn btn-secondary" href="{{ route('admin.users.edit', $user) }}">Editar usuario</a>
                 @if($canGrantTemporaryAdminPermission)
-                    <button class="btn btn-gold" type="button" data-confirm-open="grant-admin-permission-modal">Conceder permisos</button>
+                    @if($activeTemporaryAdminPermission)
+                        <button class="btn btn-danger" type="button" data-confirm-open="revoke-admin-permission-modal">Cancelar Permisos</button>
+                    @else
+                        <button class="btn btn-gold" type="button" data-confirm-open="grant-admin-permission-modal">Conceder permisos</button>
+                    @endif
                 @endif
                 @if((int) $user->id !== (int) session('auth_user_id'))
                     <button class="btn btn-danger" type="button" data-confirm-open="delete-user-modal">Eliminar usuario</button>
@@ -151,7 +155,7 @@
     </div>
 @endif
 
-@if($canGrantTemporaryAdminPermission)
+@if($canGrantTemporaryAdminPermission && ! $activeTemporaryAdminPermission)
     <div class="confirmation-modal" id="grant-admin-permission-modal" data-confirm-modal data-auto-open="{{ ($autoOpenAdminPermissionModal || $errors->has('starts_on') || $errors->has('ends_on')) ? '1' : '0' }}" hidden>
         <div class="confirmation-dialog" role="dialog" aria-modal="true" aria-labelledby="grant-admin-permission-title">
             <button class="confirmation-close" type="button" data-confirm-close aria-label="Cerrar">&times;</button>
@@ -175,14 +179,14 @@
         </div>
     </div>
 
-    <div class="confirmation-modal" id="grant-admin-permission-password-modal" data-confirm-modal data-auto-open="{{ $errors->has('admin_password') && old('admin_permission_form') ? '1' : '0' }}" hidden>
+    <div class="confirmation-modal" id="grant-admin-permission-password-modal" data-confirm-modal data-auto-open="{{ $errors->has('admin_password') && old('admin_permission_action') === 'grant' ? '1' : '0' }}" hidden>
         <div class="confirmation-dialog" role="dialog" aria-modal="true" aria-labelledby="grant-admin-permission-password-title">
             <button class="confirmation-close" type="button" data-confirm-close aria-label="Cerrar">&times;</button>
             <h3 id="grant-admin-permission-password-title">Confirmar permisos de Admin</h3>
             <p>Para completar la concesión de permisos, ingrese su contraseña de administrador.</p>
             <form method="POST" action="{{ route('admin.users.admin-permissions.grant', $user) }}" data-admin-permission-form>
                 @csrf
-                <input type="hidden" name="admin_permission_form" value="1">
+                <input type="hidden" name="admin_permission_action" value="grant">
                 <input type="hidden" name="permission_request_id" value="{{ old('permission_request_id', $adminPermissionRequestId) }}" data-admin-permission-target="permission_request_id">
                 <input type="hidden" name="starts_on" value="{{ old('starts_on', now()->toDateString()) }}" data-admin-permission-target="starts_on">
                 <input type="hidden" name="ends_on" value="{{ old('ends_on', now()->toDateString()) }}" data-admin-permission-target="ends_on">
@@ -227,8 +231,34 @@
     </script>
 @endif
 
+@if($canGrantTemporaryAdminPermission && $activeTemporaryAdminPermission)
+    <div class="confirmation-modal" id="revoke-admin-permission-modal" data-confirm-modal data-auto-open="{{ $errors->has('admin_password') && old('admin_permission_action') === 'revoke' ? '1' : '0' }}" hidden>
+        <div class="confirmation-dialog" role="dialog" aria-modal="true" aria-labelledby="revoke-admin-permission-title">
+            <button class="confirmation-close" type="button" data-confirm-close aria-label="Cerrar">&times;</button>
+            <h3 id="revoke-admin-permission-title">Cancelar permisos de Admin</h3>
+            <p>
+                Se cancelarÃ¡ el acceso temporal de administrador de <strong>{{ $user->name }}</strong>.
+                Para confirmar esta acciÃ³n, ingrese su contraseÃ±a de administrador.
+            </p>
+            <form method="POST" action="{{ route('admin.users.admin-permissions.revoke', $user) }}">
+                @csrf
+                <input type="hidden" name="admin_permission_action" value="revoke">
+                <div class="form-group">
+                    <label class="form-label" for="revoke-admin-password">Ingrese su contraseÃ±a</label>
+                    <input class="form-control" id="revoke-admin-password" type="password" name="admin_password" required autocomplete="current-password" data-confirm-password>
+                </div>
+                @error('admin_password')<div class="error-text">{{ $message }}</div>@enderror
+                <div class="actions confirmation-actions">
+                    <button class="btn btn-secondary" type="button" data-confirm-close>Cancelar</button>
+                    <button class="btn btn-danger" type="submit">Cancelar Permisos</button>
+                </div>
+            </form>
+        </div>
+    </div>
+@endif
+
 @if(request()->routeIs('admin.*') && ! $user->trashed() && (int) $user->id !== (int) session('auth_user_id'))
-    <div class="confirmation-modal" id="delete-user-modal" data-confirm-modal data-auto-open="{{ $errors->has('admin_password') && ! old('admin_permission_form') ? '1' : '0' }}" hidden>
+    <div class="confirmation-modal" id="delete-user-modal" data-confirm-modal data-auto-open="{{ $errors->has('admin_password') && ! old('admin_permission_action') ? '1' : '0' }}" hidden>
         <div class="confirmation-dialog" role="dialog" aria-modal="true" aria-labelledby="delete-user-title">
             <button class="confirmation-close" type="button" data-confirm-close aria-label="Cerrar">&times;</button>
             <h3 id="delete-user-title">Confirmar eliminación de usuario</h3>

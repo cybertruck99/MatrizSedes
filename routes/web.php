@@ -43,6 +43,7 @@ Route::middleware(['role:admin', 'throttle:internal'])->prefix('admin')->name('a
     Route::get('users/{user}', [AdminUserController::class, 'show'])->withTrashed()->name('users.show');
     Route::post('users/{user}/recuperar-contrasena', [AdminUserController::class, 'recoverPassword'])->name('users.password.recover');
     Route::post('users/{user}/permisos-admin/conceder', [AdminPermissionController::class, 'grant'])->name('users.admin-permissions.grant');
+    Route::post('users/{user}/permisos-admin/cancelar', [AdminPermissionController::class, 'revoke'])->name('users.admin-permissions.revoke');
     Route::patch('permisos-admin/solicitudes/{adminPermissionRequest}/denegar', [AdminPermissionController::class, 'deny'])->name('admin-permissions.deny');
 
     Route::get('matrix/{filter?}', [MatrixController::class, 'index'])->name('matrix.index');

@@ -16,7 +16,7 @@
         <div class="form-grid">
             <div class="form-group">
                 <label class="form-label" for="base_username">Nuevo usuario</label>
-                <input class="form-control" id="base_username" name="username" value="{{ old('username', $user->username) }}" required autofocus>
+                <input class="form-control" id="base_username" name="username" value="{{ old('username') }}" placeholder="Ingrese un usuario distinto a adminbase1" required autofocus>
                 @error('username')<div class="error-text">{{ $message }}</div>@enderror
             </div>
             <div class="form-group">

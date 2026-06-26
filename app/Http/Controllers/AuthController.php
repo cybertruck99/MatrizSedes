@@ -19,17 +19,30 @@ class AuthController extends Controller
 
         $baseAdminNotice = null;
         $baseAdmin = User::query()
-            ->where('username', 'adminbase1')
             ->where('is_base_admin', true)
             ->where('active', true)
             ->whereNull('base_setup_completed_at')
             ->first();
 
-        if ($baseAdmin && ! Hash::check('admin123', $baseAdmin->password)) {
+        if (
+            $baseAdmin
+            && (
+                mb_strtolower(trim((string) $baseAdmin->username), 'UTF-8') !== 'adminbase1'
+                || ! Hash::check('admin123', $baseAdmin->password)
+            )
+        ) {
             $baseAdmin->forceFill([
                 'is_base_admin' => false,
                 'base_setup_completed_at' => now(),
             ])->save();
+            $baseAdmin = null;
+        }
+
+        if ($baseAdmin && User::withTrashed()->count() > 1) {
+            if (! $baseAdmin->base_credentials_shown_at) {
+                $baseAdmin->forceFill(['base_credentials_shown_at' => now()])->save();
+            }
+
             $baseAdmin = null;
         }
 

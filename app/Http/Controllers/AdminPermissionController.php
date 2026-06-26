@@ -123,4 +123,28 @@ class AdminPermissionController extends Controller
             ->route('admin.users.show', $user)
             ->with('success', 'Permisos de administrador concedidos correctamente.');
     }
+
+    public function revoke(Request $request, User $user)
+    {
+        abort_unless($user->role === 'tecnico' && ! $user->trashed(), 404);
+
+        $activePermission = $user->temporaryAdminPermissions()
+            ->active()
+            ->latest('ends_at')
+            ->first();
+
+        if (! $activePermission) {
+            return redirect()
+                ->route('admin.users.show', $user)
+                ->with('error', 'Este técnico no tiene permisos de administrador vigentes.');
+        }
+
+        $this->adminPasswordVerifier->verify($request);
+
+        $activePermission->update(['revoked_at' => now()]);
+
+        return redirect()
+            ->route('admin.users.show', $user)
+            ->with('success', 'Permisos de administrador cancelados correctamente.');
+    }
 }
