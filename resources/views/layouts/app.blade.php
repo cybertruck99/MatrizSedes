@@ -36,6 +36,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>@yield('title', 'Matriz SEDES')</title>
+    <link rel="preload" as="image" href="{{ asset('assets/img/LOGO_circulo_SEDES_menu.png') }}" fetchpriority="high">
     <link rel="stylesheet" href="{{ asset('css/sedes.css') }}">
 </head>
 <body>
@@ -43,7 +44,7 @@
     <aside class="sidebar" id="sidebarPanel" aria-hidden="true">
         <button class="sidebar-close-toggle" type="button" data-sidebar-toggle aria-label="Cerrar menú" aria-controls="sidebarPanel">☰</button>
         <div class="brand">
-            <img src="{{ asset('assets/img/LOGO_circulo_SEDES.png') }}" alt="SEDES">
+            <img src="{{ asset('assets/img/LOGO_circulo_SEDES_menu.png') }}" alt="SEDES" width="56" height="56" decoding="async" fetchpriority="high" data-sidebar-logo>
             <div>
                 <h2>SEDES Potosí</h2>
                 <span>Unidad de Planificación y Proyectos</span>
@@ -170,7 +171,11 @@ document.addEventListener('DOMContentLoaded', () => {
     const shell = document.getElementById('appShell');
     const sidebar = document.getElementById('sidebarPanel');
     const backdrop = document.getElementById('sidebarBackdrop');
+    const sidebarToggles = Array.from(document.querySelectorAll('[data-sidebar-toggle]'));
+    const sidebarLogo = sidebar?.querySelector('[data-sidebar-logo]');
     const desktopMenu = window.matchMedia('(min-width: 1101px)');
+
+    sidebarLogo?.decode?.().catch(() => {});
 
     const isSidebarOpen = () => desktopMenu.matches
         ? !shell?.classList.contains('sidebar-collapsed')
@@ -179,11 +184,15 @@ document.addEventListener('DOMContentLoaded', () => {
     const setSidebarOpen = (open) => {
         shell?.classList.toggle('sidebar-collapsed', desktopMenu.matches && !open);
         shell?.classList.toggle('sidebar-open', !desktopMenu.matches && open);
-        document.querySelectorAll('[data-sidebar-toggle]').forEach((button) => {
+        sidebarToggles.forEach((button) => {
             button.setAttribute('aria-expanded', open ? 'true' : 'false');
         });
         sidebar?.setAttribute('aria-hidden', open ? 'false' : 'true');
         document.body.classList.toggle('menu-open', !desktopMenu.matches && open);
+    };
+
+    const scheduleSidebarOpen = (open) => {
+        window.requestAnimationFrame(() => setSidebarOpen(open));
     };
 
     const syncSidebarMode = () => {
@@ -194,30 +203,30 @@ document.addEventListener('DOMContentLoaded', () => {
     const initInterface = () => {
         window.initPasswordToggles?.();
 
-        document.querySelectorAll('[data-sidebar-toggle]').forEach((button) => {
+        sidebarToggles.forEach((button) => {
             if (!button.dataset.bound) {
                 button.dataset.bound = '1';
-                button.addEventListener('click', () => setSidebarOpen(!isSidebarOpen()));
+                button.addEventListener('click', () => scheduleSidebarOpen(!isSidebarOpen()));
             }
             button.setAttribute('aria-expanded', isSidebarOpen() ? 'true' : 'false');
         });
 
         if (shell && !document.body.dataset.sidebarBound) {
             document.body.dataset.sidebarBound = '1';
-            backdrop?.addEventListener('click', () => setSidebarOpen(false));
+            backdrop?.addEventListener('click', () => scheduleSidebarOpen(false));
             desktopMenu.addEventListener('change', syncSidebarMode);
             syncSidebarMode();
 
             document.addEventListener('keydown', (event) => {
                 if (event.key === 'Escape') {
-                    setSidebarOpen(false);
+                    scheduleSidebarOpen(false);
                 }
             });
 
             sidebar?.querySelectorAll('a').forEach((link) => {
                 link.addEventListener('click', () => {
                     if (!desktopMenu.matches) {
-                        setSidebarOpen(false);
+                        scheduleSidebarOpen(false);
                     }
                 });
             });
